@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>AI Resume Builder — Ncebakazi Makhanya</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>AI Resume Builder Ncebakazi Makhanya</h1>
+    <form id="resumeForm">
+      <div class="profile-section">
+        <label>Profile Picture</label>
+        <input type="file" id="profilePic" accept="image/*">
+        <img id="profilePicPreview" class="profile-pic" style="display:none;">
+      </div>
+      <label>Full name</label><input id="name" required>
+      <label>Email</label><input id="email" type="email" placeholder="Enter your email address">
+      <label>Phone</label><input id="phone" placeholder="Enter your phone number">
+        <div class="profile-presets">
+          <label>Saved Profiles</label>
+          <div>
+            <select id="profileSelect">
+              <option value="">-- Select saved profile --</option>
+            </select>
+            <button type="button" id="applyProfile">Apply</button>
+            <button type="button" id="saveProfile">Save Current as Profile</button>
+            <button type="button" id="deleteProfile">Delete Selected</button>
+            <button type="button" id="exportProfiles">Export Profiles</button>
+            <input type="file" id="importProfilesFile" accept="application/json" style="display:none">
+            <button type="button" id="importProfiles">Import Profiles</button>
+            <button type="button" id="downloadProfilePdf">Download Profile PDF</button>
+            <button type="button" id="uploadProfiles">Upload to Cloud</button>
+            <button type="button" id="downloadProfiles">Download from Cloud</button>
+          </div>
+        </div>
+      <label>Location</label><input id="location" placeholder="Enter your location">
+      <label>Skills (comma separated)</label><input id="skills" placeholder="e.g. JavaScript, SQL, CSS">
+      <label>Professional summary (leave blank for AI)</label><textarea id="summary" rows="3"></textarea>
+      <label>About Me</label><textarea id="aboutMe" rows="4" placeholder="Write a brief personal introduction, your career goals, or what makes you unique..."></textarea>
+      <h3>Experience</h3>
+      <!-- Template used to create new experience entries -->
+      <template id="exp-template">
+        <div class="exp">
+          <input class="exp-title" placeholder="Job title (e.g. Software Developer)">
+          <input class="exp-company" placeholder="Company (e.g. First Technology Solutions)">
+          <input class="exp-start" placeholder="Start (e.g. Nov 2020)">
+          <input class="exp-end" placeholder="End (e.g. Nov 2023 or Present)">
+          <textarea class="exp-desc" placeholder="Description / bullets (optional)"></textarea>
+          <button type="button" class="remove-exp">Remove</button>
+        </div>
+      </template>
+
+      <div id="experienceList"></div>
+      <button type="button" id="addExp">Add Experience</button>
+
+      <h3>Education</h3>
+      <template id="edu-template">
+        <div class="edu">
+          <input class="edu-school" placeholder="School / Institution">
+          <input class="edu-degree" placeholder="Degree / Qualification">
+          <input class="edu-year" placeholder="Year(s)">
+          <button type="button" class="remove-edu">Remove</button>
+        </div>
+      </template>
+      <div id="educationList"></div>
+      <button type="button" id="addEdu">Add Education</button>
+
+            <h3>Certifications</h3>
+            <template id="cert-template">
+              <div class="cert">
+                <input class="cert-name" placeholder="Certification name">
+                <input class="cert-issuer" placeholder="Issuer">
+                <input class="cert-year" placeholder="Year">
+                <button type="button" class="remove-cert">Remove</button>
+              </div>
+            </template>
+            <div id="certificationList"></div>
+            <button type="button" id="addCert">Add Certification</button>
+
+      <h3>LinkedIn & Portfolio</h3>
+      <label>LinkedIn Profile URL</label><input id="linkedin" type="url" placeholder="https://linkedin.com/in/yourprofile">
+      <label>Portfolio Website (optional)</label><input id="portfolio" type="url" placeholder="https://yourportfolio.com">
+
+      <h3>References</h3>
+      <template id="ref-template">
+        <div class="ref">
+          <input class="ref-name" placeholder="Reference Name">
+          <input class="ref-title" placeholder="Title/Position">
+          <input class="ref-company" placeholder="Company">
+          <input class="ref-phone" placeholder="Phone Number">
+          <input class="ref-email" type="email" placeholder="Email Address">
+          <button type="button" class="remove-ref">Remove</button>
+        </div>
+      </template>
+      <div id="referencesList"></div>
+      <button type="button" id="addRef">Add Reference</button>
+
+      <label>Upload Job Description (optional)</label>
+      <input type="file" id="jobDescFile" accept=".txt,.pdf">
+
+      <div class="actions">
+        <button type="button" id="generate">Generate Resume</button>
+        <button type="button" id="save">Save to Firestore</button>
+        <button type="button" id="downloadPdf">Download PDF (client-side)</button>
+      </div>
+    </form>
+
+    <h2>Preview</h2>
+    <div id="preview" class="resume-preview"></div>
+
+
+  <script src="app.js"></script>
+</body>
+</html>
